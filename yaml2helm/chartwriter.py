@@ -489,8 +489,12 @@ class ChartWriter:
                 # Add comment for resource sections
                 if indent == 0:
                     file.write(f"# Configuration for {key}\n")
-                file.write(f"{indent_str}{key}:\n")
-                self._write_values_with_comments(file, value, indent + 1)
+                # If empty dict, write {} instead of null
+                if not value:
+                    file.write(f"{indent_str}{key}: {{}}\n")
+                else:
+                    file.write(f"{indent_str}{key}:\n")
+                    self._write_values_with_comments(file, value, indent + 1)
             elif isinstance(value, list):
                 file.write(f"{indent_str}{key}:\n")
                 for item in value:
