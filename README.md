@@ -1,5 +1,10 @@
 # yaml2helm
 
+[![Tests](https://github.com/thecturner/yaml2helm/actions/workflows/test.yml/badge.svg)](https://github.com/thecturner/yaml2helm/actions/workflows/test.yml)
+![Python Version](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
+
 Convert Kubernetes YAML manifests into Helm charts automatically.
 
 ## Features
@@ -20,12 +25,24 @@ Convert Kubernetes YAML manifests into Helm charts automatically.
 
 ## Installation
 
+### PyPI (recommended)
+
 ```bash
-pip install -e .
+pip install yaml2helm
 ```
 
-For development:
+### Homebrew (macOS)
+
 ```bash
+# Coming soon
+brew install yaml2helm
+```
+
+### From source
+
+```bash
+git clone https://github.com/thecturner/yaml2helm.git
+cd yaml2helm
 pip install -e ".[dev]"
 ```
 
