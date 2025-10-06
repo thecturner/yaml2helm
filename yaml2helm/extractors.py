@@ -151,7 +151,11 @@ class ValueExtractor:
                 if containers and isinstance(containers[0], dict) and 'resources' in containers[0]:
                     resource_values['resources'] = containers[0]['resources']
                     values_path = make_values_path(f"{resource_key}.resources")
-                    containers[0]['resources'] = f"{{{{- toYaml {values_path} | nindent 10 }}}}"
+                    # Wrap in parens if using index function
+                    if values_path.startswith('index'):
+                        containers[0]['resources'] = f"{{{{- toYaml ({values_path}) | nindent 10 }}}}"
+                    else:
+                        containers[0]['resources'] = f"{{{{- toYaml {values_path} | nindent 10 }}}}"
 
             # Extract nodeSelector
             node_selector_path = 'spec.template.spec.nodeSelector' if kind in ['Deployment', 'StatefulSet'] else 'spec.nodeSelector'
@@ -159,7 +163,11 @@ class ValueExtractor:
             if node_selector:
                 resource_values['nodeSelector'] = node_selector
                 values_path = make_values_path(f"{resource_key}.nodeSelector")
-                set_nested_value(resource, node_selector_path, f"{{{{- toYaml {values_path} | nindent 8 }}}}")
+                # Wrap in parens if using index function
+                if values_path.startswith('index'):
+                    set_nested_value(resource, node_selector_path, f"{{{{- toYaml ({values_path}) | nindent 8 }}}}")
+                else:
+                    set_nested_value(resource, node_selector_path, f"{{{{- toYaml {values_path} | nindent 8 }}}}")
 
         elif kind == 'Service':
             if 'spec' in resource:
@@ -171,7 +179,11 @@ class ValueExtractor:
                 if 'ports' in resource['spec']:
                     resource_values['ports'] = resource['spec']['ports']
                     values_path = make_values_path(f"{resource_key}.ports")
-                    resource['spec']['ports'] = f"{{{{- toYaml {values_path} | nindent 2 }}}}"
+                    # Wrap in parens if using index function
+                    if values_path.startswith('index'):
+                        resource['spec']['ports'] = f"{{{{- toYaml ({values_path}) | nindent 2 }}}}"
+                    else:
+                        resource['spec']['ports'] = f"{{{{- toYaml {values_path} | nindent 2 }}}}"
 
         # Extract environment variables
         self._extract_env_vars_scoped(resource, resource_key, resource_values)
@@ -302,7 +314,11 @@ class ValueExtractor:
 
         # For complex types, use toYaml
         if isinstance(value, (dict, list)):
-            template = f"{{{{- toYaml {values_path} | nindent 8 }}}}"
+            # Wrap in parens if using index function
+            if values_path.startswith('index'):
+                template = f"{{{{- toYaml ({values_path}) | nindent 8 }}}}"
+            else:
+                template = f"{{{{- toYaml {values_path} | nindent 8 }}}}"
 
         set_nested_value(resource, field_path, template)
 
