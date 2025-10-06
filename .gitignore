@@ -78,3 +78,8 @@ temp/
 IMPROVEMENTS-IMPLEMENTED.md
 *-COMPARISON.md
 PROJECT-SUMMARY.md
+MONETIZATION-PLAN.md
+
+# Publishing helpers
+publish-to-pypi.sh
+Formula/
